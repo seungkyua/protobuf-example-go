@@ -5,19 +5,19 @@ import (
 	"io/ioutil"
 	"log"
 
-	"github.com/simplesteph/protobuf-example-go/src/complex"
-	"github.com/simplesteph/protobuf-example-go/src/enum_example"
-
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/proto"
-	"github.com/simplesteph/protobuf-example-go/src/simple"
+	"github.com/seungkyua/protobuf-example-go/complex"
+	"github.com/seungkyua/protobuf-example-go/enum"
+	"github.com/seungkyua/protobuf-example-go/simple"
 )
 
 func main() {
-	sm := doSimple()
+	// sm := doSimple()
 
-	readAndWriteDemo(sm)
-	jsonDemo(sm)
+	// readAndWriteDemo(sm)
+
+	// jsonDemo(sm)
 
 	doEnum()
 
@@ -25,17 +25,17 @@ func main() {
 }
 
 func doComplex() {
-	cm := complexpb.ComplexMessage{
-		OneDummy: &complexpb.DummyMessage{
+	cm := &complex.ComplexMessage{
+		OneDummy: &complex.DummyMessage{
 			Id:   1,
 			Name: "First message",
 		},
-		MultipleDummy: []*complexpb.DummyMessage{
-			&complexpb.DummyMessage{
+		MultipleDummy: []*complex.DummyMessage{
+			&complex.DummyMessage{
 				Id:   2,
 				Name: "Second message",
 			},
-			&complexpb.DummyMessage{
+			&complex.DummyMessage{
 				Id:   3,
 				Name: "Third message",
 			},
@@ -46,12 +46,12 @@ func doComplex() {
 }
 
 func doEnum() {
-	em := enumpb.EnumMessage{
+	em := &enum.EnumMessage{
 		Id:           42,
-		DayOfTheWeek: enumpb.DayOfTheWeek_THURSDAY,
+		DayOfTheWeek: enum.DayOfTheWeek_THURSDAY,
 	}
 
-	em.DayOfTheWeek = enumpb.DayOfTheWeek_MONDAY
+	em.DayOfTheWeek = enum.DayOfTheWeek_MONDAY
 	fmt.Println(em)
 }
 
@@ -59,7 +59,7 @@ func jsonDemo(sm proto.Message) {
 	smAsString := toJSON(sm)
 	fmt.Println(smAsString)
 
-	sm2 := &simplepb.SimpleMessage{}
+	sm2 := &simple.SimpleMessage{}
 	fromJSON(smAsString, sm2)
 	fmt.Println("Successfully created proto struct:", sm2)
 }
@@ -81,11 +81,21 @@ func fromJSON(in string, pb proto.Message) {
 	}
 }
 
-func readAndWriteDemo(sm proto.Message) {
-	writeToFile("simple.bin", sm)
-	sm2 := &simplepb.SimpleMessage{}
-	readFromFile("simple.bin", sm2)
-	fmt.Println("Read the content:", sm2)
+func doSimple() *simple.SimpleMessage {
+	sm := simple.SimpleMessage{
+		Id:         12345,
+		IsSimple:   true,
+		Name:       "My Simple Message",
+		SampleList: []int32{1, 4, 7, 8},
+	}
+	fmt.Println(sm)
+
+	sm.Name = "I renamed you"
+	fmt.Println(sm)
+
+	fmt.Println("The ID is:", sm.GetId())
+
+	return &sm
 }
 
 func writeToFile(fname string, pb proto.Message) error {
@@ -121,19 +131,9 @@ func readFromFile(fname string, pb proto.Message) error {
 	return nil
 }
 
-func doSimple() *simplepb.SimpleMessage {
-	sm := simplepb.SimpleMessage{
-		Id:         12345,
-		IsSimple:   true,
-		Name:       "My Simple Message",
-		SampleList: []int32{1, 4, 7, 8},
-	}
-	fmt.Println(sm)
-
-	sm.Name = "I renamed you"
-	fmt.Println(sm)
-
-	fmt.Println("The ID is:", sm.GetId())
-
-	return &sm
+func readAndWriteDemo(sm proto.Message) {
+	writeToFile("simple.bin", sm)
+	sm2 := &simple.SimpleMessage{}
+	readFromFile("simple.bin", sm2)
+	fmt.Println("Read the content:", sm2)
 }

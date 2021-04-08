@@ -1,3 +1,3 @@
-protoc -I src/ --go_out=src/ src/simple/simple.proto
-protoc -I src/ --go_out=src/ src/enum_example/enum_example.proto
-protoc -I src/ --go_out=src/ src/complex/complex.proto
+protoc -I ./ --go_out=./ --go_opt=paths=source_relative simple/simple.proto
+protoc -I ./ --go_out=./ --go_opt=paths=source_relative enum/enum.proto
+protoc -I ./ --go_out=./ --go_opt=paths=source_relative complex/complex.proto

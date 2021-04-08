@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package example.complex;
 
-option go_package = "complexpb";
+option go_package = "github.com/seungkyua/protobuf-example-go/complex";
 
 message ComplexMessage {
   DummyMessage one_dummy = 2;
